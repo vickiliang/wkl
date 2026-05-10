@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sleek Magazine — Vicki Liang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body class="gallery-body">
+  <div class="grain-overlay"></div>
+  <nav class="index-nav">
+    <span class="brand">Vicki Liang</span>
+    <div class="nav-right">
+      <a href="index.html" class="back-to-index">Index</a>
+    </div>
+  </nav>
+  <div class="gallery-project-bar">
+    <span>Sleek Magazine — Berlin — (4) — Photography, Print editorial</span>
+  </div>
+  <div class="gallery-carousel-wrapper">
+    <div class="gallery-carousel" id="gallery-carousel">
+      <div class="gallery-slide"><img src="https://images.unsplash.com/photo-1495385794356-15371f348c31?w=1200&q=80" alt="Sleek Magazine"/></div>
+      <div class="gallery-slide"><img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=1200&q=80" alt="Sleek Magazine"/></div>
+      <div class="gallery-slide"><img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=1200&q=80" alt="Sleek Magazine"/></div>
+      <div class="gallery-slide"><img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=1200&q=80" alt="Sleek Magazine"/></div>
+    </div>
+  </div>
+  <footer class="gallery-footer">
+    <span class="counter-current" id="counter-current">1 / 4</span>
+  </footer>
+  <script>
+    const carousel = document.getElementById('gallery-carousel');
+    const slides = carousel.querySelectorAll('.gallery-slide');
+    const total = slides.length;
+    const counterEl = document.getElementById('counter-current');
+    let tx = 0, maxScroll = 0;
+
+    function centerFirstSlide() {
+      const firstSlide = slides[0];
+      if (!firstSlide) return;
+      const vw = carousel.parentElement.clientWidth;
+      const slideW = firstSlide.offsetWidth;
+      const pad = (vw - slideW) / 2;
+      carousel.style.paddingLeft = Math.max(0, pad) + 'px';
+    }
+
+    function init() {
+      centerFirstSlide();
+      maxScroll = carousel.scrollWidth - carousel.parentElement.clientWidth;
+    }
+
+    window.addEventListener('load', init);
+    window.addEventListener('resize', init);
+
+    function updateCounter() {
+      if (maxScroll > 0) {
+        const cur = Math.min(total, Math.max(1, Math.round((tx / maxScroll) * (total - 1)) + 1));
+        counterEl.textContent = cur + ' / ' + total;
+      }
+    }
+    window.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      tx = Math.max(0, Math.min(tx + (e.deltaY || e.deltaX), maxScroll));
+      carousel.style.transform = 'translateX(' + (-tx) + 'px)';
+      updateCounter();
+    }, { passive: false });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { tx = Math.min(tx + 300, maxScroll); carousel.style.transform = 'translateX(' + (-tx) + 'px)'; updateCounter(); }
+      if (e.key === 'ArrowLeft') { tx = Math.max(tx - 300, 0); carousel.style.transform = 'translateX(' + (-tx) + 'px)'; updateCounter(); }
+      if (e.key === 'Escape') { fadeOut('index.html'); }
+    });
+    function fadeOut(href) {
+      document.body.classList.add('gallery-fade-out');
+      setTimeout(() => { window.location.href = href; }, 500);
+    }
+    document.querySelector('.back-to-index').addEventListener('click', function(e) {
+      e.preventDefault();
+      fadeOut(this.getAttribute('href'));
+    });
+  </script>
+</body>
+</html>
