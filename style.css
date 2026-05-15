@@ -124,7 +124,7 @@ a { color: inherit; text-decoration: none; }
   padding: 2rem 2rem 1.5rem;
 }
 
-.portfolio-list { display: flex; flex-direction: column; align-items: flex-start; }
+.portfolio-list { display: flex; flex-direction: column; align-items: center; }
 
 .portfolio-row, .portfolio-spacer {
   opacity: 0;

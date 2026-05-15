@@ -129,7 +129,7 @@
         (data.includes?.Asset || []).forEach(a => {
           const base = 'https:' + a.fields.file.url;
           assetMap[a.sys.id]      = base + '?w=1400&q=80&fm=webp';
-          assetMapThumb[a.sys.id] = base + '?w=700&q=75&fm=webp';
+          assetMapThumb[a.sys.id] = base + '?w=1400&q=85&fm=webp';
         });
 
         // Insert rows before the spacer
