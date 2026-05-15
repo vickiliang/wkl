@@ -19,15 +19,6 @@
 
       <!-- Project rows injected from Contentful -->
 
-      <div class="portfolio-spacer"></div>
-
-      <a href="#" class="portfolio-row">
-        <span class="col-title">"Innenwelt"</span>
-        <span class="col-city">Global</span>
-        <span class="col-count">(12)</span>
-        <span class="col-tags">2018–26, Ongoing personal project</span>
-      </a>
-
       <div class="portfolio-row portfolio-identity">
         <span class="col-title">Vicki Liang</span>
         <span class="col-tags identity-links">
@@ -175,12 +166,9 @@
     infoPanel.style.bottom = identityRow.getBoundingClientRect().height + 'px';
 
     let infoPanelLoaded = false;
-    let infoPanelOpen   = false;
-    let infoPanelLocked = false;
-    let mouseOverRow    = false;
 
-    function openInfoPanel()  { infoPanel.classList.add('open');    infoPanelOpen = true;  }
-    function closeInfoPanel() { infoPanel.classList.remove('open'); infoPanelOpen = false; }
+    function openInfoPanel()  { infoPanel.classList.add('open');    }
+    function closeInfoPanel() { infoPanel.classList.remove('open'); }
 
     function ensureLoaded(cb) {
       if (infoPanelLoaded) { cb(); return; }
@@ -194,17 +182,10 @@
     }
 
     identityRow.addEventListener('mouseenter', function() {
-      mouseOverRow = true;
-      ensureLoaded(() => { if (mouseOverRow || infoPanelLocked) openInfoPanel(); });
+      ensureLoaded(() => openInfoPanel());
     });
     identityRow.addEventListener('mouseleave', function() {
-      mouseOverRow = false;
-      if (!infoPanelLocked) closeInfoPanel();
-    });
-    identityRow.addEventListener('click', function(e) {
-      if (e.target.tagName === 'A') return;
-      if (infoPanelLocked) { infoPanelLocked = false; closeInfoPanel(); }
-      else { infoPanelLocked = true; ensureLoaded(() => openInfoPanel()); }
+      closeInfoPanel();
     });
   </script>
 
