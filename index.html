@@ -16,8 +16,11 @@
   <!-- Main -->
   <main class="index-main">
     <div class="portfolio-list">
+      <div class="portfolio-rows-wrapper">
 
       <!-- Project rows injected from Contentful -->
+
+      </div><!-- /.portfolio-rows-wrapper -->
 
       <div class="portfolio-row portfolio-identity">
         <span class="col-title">Vicki Liang</span>
@@ -69,6 +72,7 @@
       track.addEventListener('mousedown', e => { isDragging = true; startX = e.clientX; scrollStart = track.scrollLeft; track.style.cursor = 'grabbing'; });
       window.addEventListener('mousemove', e => { if (!isDragging) return; track.scrollLeft = scrollStart - (e.clientX - startX); });
       window.addEventListener('mouseup', () => { isDragging = false; track.style.cursor = ''; });
+      track.addEventListener('wheel', e => { e.preventDefault(); track.scrollLeft += e.deltaY + e.deltaX; }, { passive: false });
       requestAnimationFrame(() => requestAnimationFrame(() => drawer.classList.add('open')));
       row.classList.add('active');
       activeRow = row; activeDrawer = drawer;
@@ -132,9 +136,8 @@
           assetMapThumb[a.sys.id] = base + '?w=1400&q=85&fm=webp';
         });
 
-        // Insert rows before the spacer
-        const list  = document.querySelector('.portfolio-list');
-        const spacer = document.querySelector('.portfolio-spacer');
+        // Insert rows into the wrapper
+        const wrapper = document.querySelector('.portfolio-rows-wrapper');
 
         data.items.forEach(item => {
           const { projectName, projectGenre, assets } = item.fields;
@@ -155,7 +158,7 @@
             <span class="col-count">(${imgs.length})</span>
             <span class="col-tags">${projectGenre || ''}</span>
           `;
-          list.insertBefore(row, spacer);
+          wrapper.appendChild(row);
         });
 
         initRowHandlers();

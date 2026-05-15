@@ -127,6 +127,16 @@ a { color: inherit; text-decoration: none; }
 
 .portfolio-list { display: flex; flex-direction: column; align-items: center; }
 
+/* Wrapper ensures all rows share the width of the widest row so titles stay aligned */
+.portfolio-rows-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+}
+.portfolio-rows-wrapper .portfolio-row {
+  width: 100%;
+}
+
 .portfolio-row, .portfolio-spacer {
   opacity: 0;
   transform: translateY(6px);
@@ -160,9 +170,7 @@ a { color: inherit; text-decoration: none; }
 /* ─── Inline gallery drawer ─── */
 .gallery-drawer {
   width: 100vw;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-left: calc(-50vw + 50%);
   overflow: hidden;
   max-height: 0;
   transition: max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1);
