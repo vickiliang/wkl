@@ -67,7 +67,8 @@
         track.appendChild(img);
       });
       drawer.appendChild(track);
-      row.insertAdjacentElement('afterend', drawer);
+      const wrapper = document.querySelector('.portfolio-rows-wrapper');
+      wrapper.insertAdjacentElement('afterend', drawer);
       let isDragging = false, startX = 0, scrollStart = 0;
       track.addEventListener('mousedown', e => { isDragging = true; startX = e.clientX; scrollStart = track.scrollLeft; track.style.cursor = 'grabbing'; });
       window.addEventListener('mousemove', e => { if (!isDragging) return; track.scrollLeft = scrollStart - (e.clientX - startX); });
