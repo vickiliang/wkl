@@ -150,7 +150,7 @@
         const wrapper = document.querySelector('.portfolio-rows-wrapper');
 
         data.items.forEach(item => {
-          const { projectName, projectGenre, assets } = item.fields;
+          const { projectName, projectGenre, year, assets } = item.fields;
           const refs = Array.isArray(assets) ? assets : assets ? [assets] : [];
           const imgs      = refs.map(a => assetMap[a.sys.id]).filter(Boolean);
           const thumbImgs = refs.map(a => assetMapThumb[a.sys.id]).filter(Boolean);
@@ -164,6 +164,7 @@
           }
           row.innerHTML = `
             <span class="col-title">${projectName || ''}</span>
+            <span class="col-year">${year || ''}</span>
             <span class="col-city"></span>
             <span class="col-count">(${imgs.length})</span>
             <span class="col-tags">${projectGenre || ''}</span>

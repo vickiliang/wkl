@@ -159,6 +159,7 @@ a { color: inherit; text-decoration: none; }
 .portfolio-row.active { background-color: #EA3F25; color: #EAD091; }
 
 .col-title { width: 180px; flex-shrink: 0; text-align: left; }
+.col-year  { width: 60px;  flex-shrink: 0; text-align: left; }
 .col-city  { display: none; }
 .col-count { display: none; }
 .col-tags  { white-space: nowrap; text-align: left; }
