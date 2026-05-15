@@ -13,14 +13,6 @@
 
   <div class="grain-overlay"></div>
 
-  <!-- Nav -->
-  <nav class="index-nav">
-    <span class="brand">Vicki Liang</span>
-    <div class="nav-right">
-      <a href="info.html">Info</a>
-    </div>
-  </nav>
-
   <!-- Main -->
   <main class="index-main">
     <div class="portfolio-list">
@@ -147,18 +139,21 @@
         <span class="col-tags">2018–26, Ongoing personal project</span>
       </a>
 
+      <div class="portfolio-row portfolio-identity">
+        <span class="col-title">Vicki Liang</span>
+        <span class="col-tags identity-links">
+          <span class="identity-info">Info</span>
+          <a href="mailto:info@vickiliang.com">info@vickiliang.com</a>
+          <a href="https://www.instagram.com/vickiliang_/" target="_blank">@vickiliang_</a>
+        </span>
+      </div>
+
     </div>
   </main>
 
-  <!-- Contact sidebar -->
-  <aside class="index-aside">
-    <p>info@vickiliang.com</p>
-    <a href="https://www.instagram.com/vickiliang_/" target="_blank" class="aside-ig">@vickiliang_</a>
-  </aside>
-
   <script>
     // Stagger row fade-in animation
-    document.querySelectorAll('.portfolio-row, .portfolio-spacer').forEach((el, i) => {
+    document.querySelectorAll('.portfolio-row:not(.portfolio-identity), .portfolio-spacer').forEach((el, i) => {
       el.style.animationDelay = (i * 0.04) + 's';
     });
 
@@ -237,7 +232,7 @@
     hoverPreview.appendChild(hoverImg);
     document.body.appendChild(hoverPreview);
 
-    document.querySelectorAll('.portfolio-row').forEach(row => {
+    document.querySelectorAll('.portfolio-row:not(.portfolio-identity)').forEach(row => {
       row.addEventListener('mouseenter', function() {
         const raw = this.dataset.images;
         if (!raw) return;
@@ -250,7 +245,7 @@
       });
     });
 
-    document.querySelectorAll('.portfolio-row').forEach(row => {
+    document.querySelectorAll('.portfolio-row:not(.portfolio-identity)').forEach(row => {
       row.addEventListener('click', function(e) {
         e.preventDefault();
         const raw = this.dataset.images;
@@ -270,6 +265,61 @@
         closeDrawer(true);
         openDrawer(this, images);
       });
+    });
+
+    // ── Info slide-up panel ──
+    const infoPanel = document.createElement('div');
+    infoPanel.className = 'info-panel';
+    const infoPanelInner = document.createElement('div');
+    infoPanelInner.className = 'info-panel-inner';
+    infoPanel.appendChild(infoPanelInner);
+    document.body.appendChild(infoPanel);
+
+    const identityRow = document.querySelector('.portfolio-identity');
+    infoPanel.style.bottom = identityRow.getBoundingClientRect().height + 'px';
+
+    let infoPanelLoaded = false;
+    let infoPanelOpen   = false;
+    let infoPanelLocked = false;
+    let mouseOverRow    = false;
+
+    function openInfoPanel()  { infoPanel.classList.add('open');    infoPanelOpen = true;  }
+    function closeInfoPanel() { infoPanel.classList.remove('open'); infoPanelOpen = false; }
+
+    function ensureLoaded(cb) {
+      if (infoPanelLoaded) { cb(); return; }
+      fetch('info.html')
+        .then(r => r.text())
+        .then(html => {
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+          const grid = doc.querySelector('.editorial-grid');
+          if (grid) infoPanelInner.appendChild(grid);
+          infoPanelLoaded = true;
+          cb();
+        });
+    }
+
+    // Hover: show transiently
+    identityRow.addEventListener('mouseenter', function() {
+      mouseOverRow = true;
+      ensureLoaded(() => { if (mouseOverRow || infoPanelLocked) openInfoPanel(); });
+    });
+
+    identityRow.addEventListener('mouseleave', function() {
+      mouseOverRow = false;
+      if (!infoPanelLocked) closeInfoPanel();
+    });
+
+    // Click: lock open / unlock
+    identityRow.addEventListener('click', function(e) {
+      if (e.target.tagName === 'A') return; // let email & IG links through
+      if (infoPanelLocked) {
+        infoPanelLocked = false;
+        closeInfoPanel();
+      } else {
+        infoPanelLocked = true;
+        ensureLoaded(() => openInfoPanel());
+      }
     });
   </script>
 
