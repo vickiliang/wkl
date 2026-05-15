@@ -242,7 +242,7 @@
         const raw = this.dataset.images;
         if (!raw) return;
         const images = JSON.parse(raw);
-        hoverImg.src = images[Math.floor(Math.random() * images.length)];
+        hoverImg.src = images[0];
         hoverPreview.classList.add('visible');
       });
       row.addEventListener('mouseleave', function() {
