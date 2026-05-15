@@ -229,6 +229,27 @@
       autoCloseTimer = setTimeout(() => closeDrawer(false), 3000);
     }
 
+    // ── Hover image preview ──
+    const hoverPreview = document.createElement('div');
+    hoverPreview.className = 'hover-preview';
+    const hoverImg = document.createElement('img');
+    hoverImg.draggable = false;
+    hoverPreview.appendChild(hoverImg);
+    document.body.appendChild(hoverPreview);
+
+    document.querySelectorAll('.portfolio-row').forEach(row => {
+      row.addEventListener('mouseenter', function() {
+        const raw = this.dataset.images;
+        if (!raw) return;
+        const images = JSON.parse(raw);
+        hoverImg.src = images[Math.floor(Math.random() * images.length)];
+        hoverPreview.classList.add('visible');
+      });
+      row.addEventListener('mouseleave', function() {
+        hoverPreview.classList.remove('visible');
+      });
+    });
+
     document.querySelectorAll('.portfolio-row').forEach(row => {
       row.addEventListener('click', function(e) {
         e.preventDefault();
