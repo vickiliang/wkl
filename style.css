@@ -127,13 +127,11 @@ a { color: inherit; text-decoration: none; }
 
 .portfolio-list { display: flex; flex-direction: column; align-items: center; width: 100%; }
 
-/* Wrapper ensures all rows share the width of the widest row so titles stay aligned */
+/* Wrapper is full-width; rows are centred individually; drawer uses order to slot in after clicked row */
 .portfolio-rows-wrapper {
   display: flex;
   flex-direction: column;
-  width: max-content;
-}
-.portfolio-rows-wrapper .portfolio-row {
+  align-items: center;
   width: 100%;
 }
 

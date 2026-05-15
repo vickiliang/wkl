@@ -68,7 +68,8 @@
       });
       drawer.appendChild(track);
       const wrapper = document.querySelector('.portfolio-rows-wrapper');
-      wrapper.insertAdjacentElement('afterend', drawer);
+      drawer.style.order = (parseInt(row.style.order) + 1).toString();
+      wrapper.appendChild(drawer);
       let isDragging = false, startX = 0, scrollStart = 0;
       track.addEventListener('mousedown', e => { isDragging = true; startX = e.clientX; scrollStart = track.scrollLeft; track.style.cursor = 'grabbing'; });
       window.addEventListener('mousemove', e => { if (!isDragging) return; track.scrollLeft = scrollStart - (e.clientX - startX); });
@@ -90,10 +91,18 @@
 
     // ── Attach handlers to all project rows ──
     function initRowHandlers() {
-      document.querySelectorAll('.portfolio-row:not(.portfolio-identity), .portfolio-spacer').forEach((el, i) => {
-        el.style.animationDelay = (i * 0.04) + 's';
+      const projectRows = document.querySelectorAll('.portfolio-rows-wrapper .portfolio-row');
+
+      // Normalise all rows to the widest row so titles stay left-aligned
+      let maxW = 0;
+      projectRows.forEach(r => { maxW = Math.max(maxW, r.scrollWidth); });
+      projectRows.forEach((r, i) => {
+        r.style.minWidth = maxW + 'px';
+        r.style.order    = (i * 2).toString(); // even slots; drawer gets odd slot
+        r.style.animationDelay = (i * 0.04) + 's';
       });
-      document.querySelectorAll('.portfolio-row:not(.portfolio-identity)').forEach(row => {
+
+      projectRows.forEach(row => {
         row.addEventListener('mouseenter', function() {
           if (activeRow === this) return;
           const preview = this.dataset.preview;
