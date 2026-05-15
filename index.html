@@ -90,10 +90,14 @@
       });
       document.querySelectorAll('.portfolio-row:not(.portfolio-identity)').forEach(row => {
         row.addEventListener('mouseenter', function() {
-          const raw = this.dataset.images;
-          if (!raw) return;
-          hoverImg.src = JSON.parse(raw)[0];
+          if (activeRow === this) return;
+          const preview = this.dataset.preview;
+          if (!preview) return;
+          hoverImg.src = preview;
           hoverPreview.classList.add('visible');
+          // Preload full-res gallery images while user hovers
+          const raw = this.dataset.images;
+          if (raw) JSON.parse(raw).forEach(src => { const i = new Image(); i.src = src; });
         });
         row.addEventListener('mouseleave', function() {
           hoverPreview.classList.remove('visible');
@@ -103,6 +107,7 @@
           const raw = this.dataset.images;
           if (!raw) return;
           const images = JSON.parse(raw);
+          hoverPreview.classList.remove('visible');
           if (activeRow === this) { closeDrawer(false); return; }
           closeDrawer(true);
           openDrawer(this, images);
@@ -119,9 +124,12 @@
         const data = await res.json();
 
         // Build asset URL lookup
-        const assetMap = {};
+        const assetMap = {};     // full-res for gallery drawer
+        const assetMapThumb = {}; // smaller for hover preview
         (data.includes?.Asset || []).forEach(a => {
-          assetMap[a.sys.id] = 'https:' + a.fields.file.url + '?w=1200&q=80';
+          const base = 'https:' + a.fields.file.url;
+          assetMap[a.sys.id]      = base + '?w=1400&q=80&fm=webp';
+          assetMapThumb[a.sys.id] = base + '?w=700&q=75&fm=webp';
         });
 
         // Insert rows before the spacer
@@ -131,12 +139,16 @@
         data.items.forEach(item => {
           const { projectName, projectGenre, assets } = item.fields;
           const refs = Array.isArray(assets) ? assets : assets ? [assets] : [];
-          const imgs = refs.map(a => assetMap[a.sys.id]).filter(Boolean);
+          const imgs      = refs.map(a => assetMap[a.sys.id]).filter(Boolean);
+          const thumbImgs = refs.map(a => assetMapThumb[a.sys.id]).filter(Boolean);
 
           const row = document.createElement('a');
           row.href = '#';
           row.className = 'portfolio-row';
-          if (imgs.length) row.dataset.images = JSON.stringify(imgs);
+          if (imgs.length) {
+            row.dataset.images  = JSON.stringify(imgs);
+            row.dataset.preview = thumbImgs[0] || imgs[0];
+          }
           row.innerHTML = `
             <span class="col-title">${projectName || ''}</span>
             <span class="col-city"></span>
@@ -147,6 +159,12 @@
         });
 
         initRowHandlers();
+
+        // Silently preload all hover preview thumbnails
+        document.querySelectorAll('.portfolio-row[data-preview]').forEach(row => {
+          const img = new Image();
+          img.src = row.dataset.preview;
+        });
       } catch (err) {
         console.error('Contentful fetch failed:', err);
       }
