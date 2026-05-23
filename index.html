@@ -195,7 +195,7 @@
     document.body.appendChild(infoPanel);
 
     const identityRow = document.querySelector('.portfolio-identity');
-    infoPanel.style.bottom = identityRow.getBoundingClientRect().height + 'px';
+    infoPanel.style.top = identityRow.getBoundingClientRect().bottom + 'px';
 
     let infoPanelLoaded = false;
 

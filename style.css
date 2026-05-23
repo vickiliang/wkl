@@ -82,12 +82,14 @@ a { color: inherit; text-decoration: none; }
 
 .portfolio-identity {
   position: fixed;
-  bottom: 0;
-  left: 0;
+  top: 200px;
+  left: 50%;
+  transform: translateX(-50%);
   background-color: #EA3F25 !important;
   color: #EAD091;
   cursor: default;
   z-index: 50;
+  white-space: nowrap;
 }
 
 .identity-links {
@@ -114,6 +116,7 @@ a { color: inherit; text-decoration: none; }
   background-color: transparent;
   z-index: 45;
   transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  /* top is set dynamically in JS, anchored below the identity row */
 }
 
 .info-panel.open {
