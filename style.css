@@ -4,8 +4,8 @@
 :root {
   --primary:               #1C191A;
   --on-surface:            #1C191A;
-  --background:            #f0efec;
-  --surface:               #f0efec;
+  --background:            #ffffff;
+  --surface:               #ffffff;
   --surface-container-low: #e8e7e3;
   --on-surface-variant:    #4c4547;
   --font: 'Inter', sans-serif;
@@ -189,7 +189,7 @@ a { color: inherit; text-decoration: none; }
 .gallery-drawer-track {
   display: flex;
   align-items: stretch;
-  justify-content: safe center; /* centre when images fit; left-align when they overflow so scroll still works */
+  justify-content: center;
   gap: 3px;
   height: 260px;
   padding: 10px 2rem;

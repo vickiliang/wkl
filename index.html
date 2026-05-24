@@ -61,9 +61,16 @@
       drawer.className = 'gallery-drawer';
       const track = document.createElement('div');
       track.className = 'gallery-drawer-track';
+      let loaded = 0;
       images.forEach(src => {
         const img = document.createElement('img');
         img.src = src; img.draggable = false;
+        img.addEventListener('load', () => {
+          loaded++;
+          if (loaded === images.length && track.scrollWidth > track.clientWidth) {
+            track.style.justifyContent = 'flex-start';
+          }
+        });
         track.appendChild(img);
       });
       drawer.appendChild(track);
