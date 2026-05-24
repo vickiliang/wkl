@@ -104,7 +104,7 @@
 
       projectRows.forEach(row => {
         row.addEventListener('mouseenter', function() {
-          if (activeRow === this) return;
+          if (activeDrawer) return; // carousel open — suppress hover on all rows
           const preview = this.dataset.preview;
           if (!preview) return;
           hoverImg.src = preview;
