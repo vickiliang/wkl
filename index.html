@@ -11,6 +11,7 @@
 </head>
 <body>
 
+  <div class="page-bg"></div>
   <div class="grain-overlay"></div>
 
   <!-- Main -->
@@ -98,37 +99,42 @@
 
     // ── Random position outside the centred list ──
     function randomHoverPosition() {
-      // Measure an actual row — the wrapper is width:100% so its rect spans the full page
       const firstRow = document.querySelector('.portfolio-rows-wrapper .portfolio-row');
       if (!firstRow) return;
       const rect = firstRow.getBoundingClientRect();
       const vw  = window.innerWidth;
       const vh  = window.innerHeight;
-      const imgH = vh * 0.38;
-      const imgW = (hoverImg.naturalWidth > 0 && hoverImg.naturalHeight > 0)
+
+      // Match CSS caps: height 38vh, max-width 40vw, max-height 50vh
+      const imgH = Math.min(vh * 0.38, vh * 0.5);
+      const rawW = (hoverImg.naturalWidth > 0 && hoverImg.naturalHeight > 0)
         ? imgH * (hoverImg.naturalWidth / hoverImg.naturalHeight)
         : 350;
+      const imgW = Math.min(rawW, vw * 0.4); // respect max-width: 40vw
+
       const buf    = 10;
       const margin = 16;
 
-      // Left zone:  image must end before list left edge
-      const leftMax  = rect.left - buf - imgW;
-      // Right zone: image must start after list right edge
+      const leftMax  = rect.left  - buf - imgW;
       const rightMin = rect.right + buf;
-      const rightMax = vw - imgW - margin;
+      const rightMax = vw - imgW  - margin;
 
       const zones = [];
-      if (leftMax  > margin)    zones.push('left');
-      if (rightMax > rightMin)  zones.push('right');
+      if (leftMax  > margin)   zones.push('left');
+      if (rightMax > rightMin) zones.push('right');
 
       let x = margin;
       if (zones.length > 0) {
         const side = zones[Math.floor(Math.random() * zones.length)];
         x = side === 'left'
-          ? margin + Math.random() * (leftMax - margin)
-          : rightMin + Math.random() * (rightMax - rightMin);
+          ? margin + Math.random() * Math.max(0, leftMax - margin)
+          : rightMin + Math.random() * Math.max(0, rightMax - rightMin);
       }
-      const y = Math.max(margin, Math.random() * Math.max(margin, vh - imgH - margin));
+
+      // Clamp so image is always fully inside viewport
+      x = Math.max(margin, Math.min(x, vw - imgW - margin));
+      const y = Math.max(margin, Math.random() * Math.max(0, vh - imgH - margin));
+
       Object.assign(hoverPreview.style, { left: x + 'px', top: y + 'px', right: 'auto', bottom: 'auto' });
     }
 
@@ -161,7 +167,10 @@
       projectRows.forEach(row => {
         row.addEventListener('mouseenter', function() {
           if (activeDrawer) return; // carousel open — suppress hover on all rows
-          if (this.dataset.hoverColor) document.body.style.backgroundColor = this.dataset.hoverColor;
+          if (this.dataset.hoverColor) {
+            document.querySelector('.page-bg').style.backgroundColor = this.dataset.hoverColor;
+            document.body.classList.add('bg-active');
+          }
           const preview = this.dataset.preview;
           if (!preview) return;
           hoverImg.src = preview;
@@ -179,7 +188,8 @@
         });
         row.addEventListener('mouseleave', function() {
           hoverPreview.classList.remove('visible');
-          document.body.style.backgroundColor = '';
+          document.querySelector('.page-bg').style.backgroundColor = '';
+          document.body.classList.remove('bg-active');
         });
         row.addEventListener('click', function(e) {
           e.preventDefault();

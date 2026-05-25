@@ -19,7 +19,16 @@ body {
   color: var(--on-surface);
   line-height: 1.5;
   animation: pageFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Full-page colour layer — blend-mode elements composite against this */
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-color: #ffffff;
   transition: background-color 0.3s ease;
+  pointer-events: none;
 }
 
 @keyframes pageFadeIn {
@@ -81,6 +90,7 @@ a { color: inherit; text-decoration: none; }
   flex-direction: column;
   padding-top: 120px; /* clears fixed identity row (50px top + ~20px height + 50px gap) */
   padding-bottom: 3rem;
+  position: relative;
 }
 
 .portfolio-identity {
@@ -110,6 +120,9 @@ a { color: inherit; text-decoration: none; }
 .identity-info {
   cursor: pointer;
 }
+
+/* blend mode only active when a hover colour is flooding the background */
+body.bg-active .portfolio-identity { mix-blend-mode: soft-light; }
 
 /* ── Info slide-up panel ── */
 .info-panel {
@@ -163,7 +176,7 @@ a { color: inherit; text-decoration: none; }
   font-size: 14px;
 }
 
-.portfolio-row:hover  { color: #EA3F25; }
+.portfolio-row:hover  { color: #ffffff; }
 .portfolio-row.active { background-color: #EA3F25; color: #EAD091; }
 
 .col-title { width: 180px; flex-shrink: 0; text-align: left; }
@@ -250,8 +263,11 @@ a { color: inherit; text-decoration: none; }
 
 .hover-preview img {
   display: block;
-  height: 38vh;   /* consistent height for all images */
-  width: auto;    /* proportional width */
+  height: 38vh;
+  width: auto;
+  max-width: 40vw;  /* prevent wide landscapes overflowing */
+  max-height: 50vh; /* safety cap */
+  object-fit: contain;
 }
 
 
