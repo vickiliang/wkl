@@ -96,6 +96,42 @@
     hoverPreview.appendChild(hoverImg);
     document.body.appendChild(hoverPreview);
 
+    // ── Random position outside the centred list ──
+    function randomHoverPosition() {
+      // Measure an actual row — the wrapper is width:100% so its rect spans the full page
+      const firstRow = document.querySelector('.portfolio-rows-wrapper .portfolio-row');
+      if (!firstRow) return;
+      const rect = firstRow.getBoundingClientRect();
+      const vw  = window.innerWidth;
+      const vh  = window.innerHeight;
+      const imgH = vh * 0.38;
+      const imgW = (hoverImg.naturalWidth > 0 && hoverImg.naturalHeight > 0)
+        ? imgH * (hoverImg.naturalWidth / hoverImg.naturalHeight)
+        : 350;
+      const buf    = 10;
+      const margin = 16;
+
+      // Left zone:  image must end before list left edge
+      const leftMax  = rect.left - buf - imgW;
+      // Right zone: image must start after list right edge
+      const rightMin = rect.right + buf;
+      const rightMax = vw - imgW - margin;
+
+      const zones = [];
+      if (leftMax  > margin)    zones.push('left');
+      if (rightMax > rightMin)  zones.push('right');
+
+      let x = margin;
+      if (zones.length > 0) {
+        const side = zones[Math.floor(Math.random() * zones.length)];
+        x = side === 'left'
+          ? margin + Math.random() * (leftMax - margin)
+          : rightMin + Math.random() * (rightMax - rightMin);
+      }
+      const y = Math.max(margin, Math.random() * Math.max(margin, vh - imgH - margin));
+      Object.assign(hoverPreview.style, { left: x + 'px', top: y + 'px', right: 'auto', bottom: 'auto' });
+    }
+
     // ── Attach handlers to all project rows ──
     function initRowHandlers() {
       const projectRows = document.querySelectorAll('.portfolio-rows-wrapper .portfolio-row');
@@ -115,6 +151,13 @@
           const preview = this.dataset.preview;
           if (!preview) return;
           hoverImg.src = preview;
+          if (this._hoverX !== undefined) {
+            Object.assign(hoverPreview.style, { left: this._hoverX + 'px', top: this._hoverY + 'px', right: 'auto', bottom: 'auto' });
+          } else {
+            randomHoverPosition();
+            this._hoverX = parseFloat(hoverPreview.style.left);
+            this._hoverY = parseFloat(hoverPreview.style.top);
+          }
           hoverPreview.classList.add('visible');
           // Preload full-res gallery images while user hovers
           const raw = this.dataset.images;

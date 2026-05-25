@@ -162,7 +162,7 @@ a { color: inherit; text-decoration: none; }
   font-size: 14px;
 }
 
-.portfolio-row:hover,
+.portfolio-row:hover  { color: #EA3F25; }
 .portfolio-row.active { background-color: #EA3F25; color: #EAD091; }
 
 .col-title { width: 180px; flex-shrink: 0; text-align: left; }
@@ -239,11 +239,6 @@ a { color: inherit; text-decoration: none; }
 /* ─── Hover image preview ─── */
 .hover-preview {
   position: fixed;
-  bottom: 3rem;
-  left: 0;
-  right: 0;
-  width: fit-content;
-  margin: 0 auto;
   pointer-events: none;
   z-index: 5;
   opacity: 0;
