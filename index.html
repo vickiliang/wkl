@@ -136,6 +136,18 @@
     function initRowHandlers() {
       const projectRows = document.querySelectorAll('.portfolio-rows-wrapper .portfolio-row');
 
+      // Bold full-page palette (Lords of Design–style)
+      const hoverPalette = [
+        '#FFFF00', // bright yellow
+        '#FF69B4', // hot pink
+        '#00CFFF', // electric blue
+        '#00FF7F', // spring green
+        '#FF8C00', // orange
+        '#C3F73A', // lime
+        '#FF6B6B', // coral
+        '#BF9FFF', // violet
+      ];
+
       // Normalise all rows to the widest row so titles stay left-aligned
       let maxW = 0;
       projectRows.forEach(r => { maxW = Math.max(maxW, r.scrollWidth); });
@@ -143,11 +155,13 @@
         r.style.minWidth = maxW + 'px';
         r.style.order    = (i * 2).toString(); // even slots; drawer gets odd slot
         r.style.animationDelay = (i * 0.04) + 's';
+        r.dataset.hoverColor = hoverPalette[i % hoverPalette.length];
       });
 
       projectRows.forEach(row => {
         row.addEventListener('mouseenter', function() {
           if (activeDrawer) return; // carousel open — suppress hover on all rows
+          if (this.dataset.hoverColor) document.body.style.backgroundColor = this.dataset.hoverColor;
           const preview = this.dataset.preview;
           if (!preview) return;
           hoverImg.src = preview;
@@ -165,6 +179,7 @@
         });
         row.addEventListener('mouseleave', function() {
           hoverPreview.classList.remove('visible');
+          document.body.style.backgroundColor = '';
         });
         row.addEventListener('click', function(e) {
           e.preventDefault();
