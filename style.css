@@ -1,6 +1,13 @@
 /* ─── Reset & Base ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+@font-face {
+  font-family: 'GT Pressura Mono';
+  src: url('GT-Pressura-Mono-Light-Trial.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
 :root {
   --primary:               #1C191A;
   --on-surface:            #1C191A;
@@ -8,7 +15,7 @@
   --surface:               #ffffff;
   --surface-container-low: #e8e7e3;
   --on-surface-variant:    #4c4547;
-  --font: 'Inter', sans-serif;
+  --font: 'GT Pressura Mono', monospace;
 }
 
 html { -webkit-font-smoothing: antialiased; }
@@ -84,74 +91,30 @@ a { color: inherit; text-decoration: none; }
 
 .index-main {
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-direction: column;
-  padding-top: 120px; /* clears fixed identity row (50px top + ~20px height + 50px gap) */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  padding-top: 120px;
   padding-bottom: 3rem;
   position: relative;
 }
 
-.portfolio-identity {
-  position: fixed;
-  top: 50px;
-  left: 0;
-  right: 0;
-  width: fit-content;
-  margin: 0 auto;
-  color: var(--on-surface);
-  cursor: default;
-  z-index: 50;
-  white-space: nowrap;
+
+.portfolio-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between; /* rows at top, info at bottom */
+  width: 100%;
+  border-right: 1px dashed #FF0000;
+  padding-right: 2rem;
 }
-
-.identity-links {
-  display: inline-flex;
-  gap: 2rem;
-  align-items: center;
-}
-
-.identity-links a {
-  color: var(--on-surface);
-}
-
-.identity-info {
-  cursor: pointer;
-}
-
-/* blend mode only active when a hover colour is flooding the background */
-body.bg-active .portfolio-identity { mix-blend-mode: soft-light; }
-
-/* ── Info slide-up panel ── */
-.info-panel {
-  position: fixed;
-  left: 0;
-  right: 0;
-  max-height: 0;
-  overflow: hidden;
-  background-color: transparent;
-  z-index: 45;
-  transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  /* top is set dynamically in JS, anchored below the identity row */
-}
-
-.info-panel.open {
-  max-height: 70vh;
-  overflow-y: auto;
-}
-
-.info-panel-inner {
-  padding: 2rem 2rem 1.5rem;
-}
-
-.portfolio-list { display: flex; flex-direction: column; align-items: center; width: 100%; }
 
 /* Wrapper is full-width; rows are centred individually; drawer uses order to slot in after clicked row */
 .portfolio-rows-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
 }
 
@@ -185,6 +148,32 @@ body.bg-active .portfolio-identity { mix-blend-mode: soft-light; }
 .col-tags  { white-space: nowrap; text-align: left; }
 
 .portfolio-spacer { height: 2rem; }
+
+/* Bottom-left info block */
+.portfolio-info {
+  padding: 2rem 2rem 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--on-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.portfolio-info .info-label {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--on-surface-variant);
+  margin-top: 0.5rem;
+}
+
+.portfolio-info a {
+  color: var(--on-surface);
+  text-decoration: none;
+}
+
+.portfolio-info a:hover { text-decoration: underline; }
 
 /* ─── Inline gallery drawer ─── */
 .gallery-drawer {
@@ -252,6 +241,14 @@ body.bg-active .portfolio-identity { mix-blend-mode: soft-light; }
 /* ─── Hover image preview ─── */
 .hover-preview {
   position: fixed;
+  right: 0;
+  top: 120px;
+  width: 50vw;
+  height: calc(100vh - 120px - 3rem);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 50px;
   pointer-events: none;
   z-index: 5;
   opacity: 0;
@@ -262,10 +259,10 @@ body.bg-active .portfolio-identity { mix-blend-mode: soft-light; }
 
 .hover-preview img {
   display: block;
-  height: 38vh;
+  max-height: calc(100vh - 160px);
+  max-width: 46vw;
   width: auto;
-  max-width: 40vw;  /* prevent wide landscapes overflowing */
-  max-height: 50vh; /* safety cap */
+  height: auto;
   object-fit: contain;
 }
 
