@@ -194,7 +194,7 @@ a { color: inherit; text-decoration: none; }
 .gallery-drawer-track {
   display: flex;
   align-items: stretch;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 3px;
   height: 260px;
   padding: 10px 2rem;
@@ -215,6 +215,42 @@ a { color: inherit; text-decoration: none; }
   flex-shrink: 0;
   pointer-events: none;
 }
+
+/* ── Carousel video items ── */
+.carousel-video-wrap {
+  position: relative;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.carousel-video-wrap video {
+  height: 100%;
+  width: auto;
+  display: block;
+  pointer-events: none;
+}
+
+.carousel-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  pointer-events: all;
+}
+
+.carousel-play-btn:hover { background: rgba(0, 0, 0, 0.8); }
 
 .index-aside {
   position: fixed;

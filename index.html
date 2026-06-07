@@ -51,22 +51,47 @@
       activeRow = null; activeDrawer = null;
     }
 
-    function openDrawer(row, images) {
+    function openDrawer(row, assets) {
       const drawer = document.createElement('div');
       drawer.className = 'gallery-drawer';
       const track = document.createElement('div');
       track.className = 'gallery-drawer-track';
-      let loaded = 0;
-      images.forEach(src => {
-        const img = document.createElement('img');
-        img.src = src; img.draggable = false;
-        img.addEventListener('load', () => {
-          loaded++;
-          if (loaded === images.length && track.scrollWidth > track.clientWidth) {
-            track.style.justifyContent = 'flex-start';
-          }
-        });
-        track.appendChild(img);
+
+      assets.forEach(asset => {
+        if (asset.type === 'video') {
+          // ── Video: autoplay muted loop + play-with-sound button ──
+          const wrap = document.createElement('div');
+          wrap.className = 'carousel-video-wrap';
+
+          const video = document.createElement('video');
+          video.src = asset.url;
+          video.autoplay = true; video.muted = true;
+          video.loop = true; video.playsInline = true;
+          video.setAttribute('playsinline', '');
+          video.draggable = false;
+
+          const btn = document.createElement('button');
+          btn.className = 'carousel-play-btn';
+          btn.innerHTML = '&#9654;';
+          btn.title = 'Play with sound';
+          btn.addEventListener('click', e => {
+            e.stopPropagation();
+            video.muted = false;
+            video.loop = false;
+            video.currentTime = 0;
+            video.play();
+            btn.style.display = 'none';
+          });
+
+          wrap.appendChild(video);
+          wrap.appendChild(btn);
+          track.appendChild(wrap);
+        } else {
+          // ── Image ──
+          const img = document.createElement('img');
+          img.src = asset.url; img.draggable = false;
+          track.appendChild(img);
+        }
       });
       drawer.appendChild(track);
       const wrapper = document.querySelector('.portfolio-rows-wrapper');
@@ -125,9 +150,9 @@
           if (!preview) return;
           hoverImg.src = preview;
           hoverPreview.classList.add('visible');
-          // Preload full-res gallery images while user hovers
+          // Preload full-res images while user hovers (skip videos)
           const raw = this.dataset.images;
-          if (raw) JSON.parse(raw).forEach(src => { const i = new Image(); i.src = src; });
+          if (raw) JSON.parse(raw).forEach(a => { if (a.type === 'image') { const i = new Image(); i.src = a.url; } });
         });
         row.addEventListener('mouseleave', function() {
           hoverPreview.classList.remove('visible');
@@ -153,13 +178,19 @@
         );
         const data = await res.json();
 
-        // Build asset URL lookup
-        const assetMap = {};     // full-res for gallery drawer
-        const assetMapThumb = {}; // smaller for hover preview
+        // Build asset lookup — detect video vs image
+        const assetMap = {};
+        const assetMapThumb = {};
         (data.includes?.Asset || []).forEach(a => {
           const base = 'https:' + a.fields.file.url;
-          assetMap[a.sys.id]      = base + '?w=1400&q=80&fm=webp';
-          assetMapThumb[a.sys.id] = base + '?w=1400&q=85&fm=webp';
+          const ct   = a.fields.file.contentType || '';
+          if (ct.startsWith('video/')) {
+            assetMap[a.sys.id]      = { url: base, type: 'video' };
+            assetMapThumb[a.sys.id] = null; // no image thumb for video
+          } else {
+            assetMap[a.sys.id]      = { url: base + '?w=1400&q=80&fm=webp', type: 'image' };
+            assetMapThumb[a.sys.id] = base + '?w=1400&q=85&fm=webp';
+          }
         });
 
         // Insert rows into the wrapper
@@ -168,15 +199,15 @@
         data.items.forEach(item => {
           const { projectName, projectGenre, year, assets } = item.fields;
           const refs = Array.isArray(assets) ? assets : assets ? [assets] : [];
-          const imgs      = refs.map(a => assetMap[a.sys.id]).filter(Boolean);
-          const thumbImgs = refs.map(a => assetMapThumb[a.sys.id]).filter(Boolean);
+          const assetList = refs.map(a => assetMap[a.sys.id]).filter(Boolean);
+          const thumbUrl  = refs.map(a => assetMapThumb[a.sys.id]).find(t => t); // first image thumb
 
           const row = document.createElement('a');
           row.href = '#';
           row.className = 'portfolio-row';
-          if (imgs.length) {
-            row.dataset.images  = JSON.stringify(imgs);
-            row.dataset.preview = thumbImgs[0] || imgs[0];
+          if (assetList.length) {
+            row.dataset.images  = JSON.stringify(assetList);
+            if (thumbUrl) row.dataset.preview = thumbUrl;
           }
           row.innerHTML = `
             <span class="col-title">${projectName || ''}</span>
@@ -190,10 +221,9 @@
 
         initRowHandlers();
 
-        // Silently preload all hover preview thumbnails
+        // Silently preload all hover preview thumbnails (images only)
         document.querySelectorAll('.portfolio-row[data-preview]').forEach(row => {
-          const img = new Image();
-          img.src = row.dataset.preview;
+          const img = new Image(); img.src = row.dataset.preview;
         });
       } catch (err) {
         console.error('Contentful fetch failed:', err);
