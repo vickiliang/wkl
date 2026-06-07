@@ -105,7 +105,7 @@
       requestAnimationFrame(() => requestAnimationFrame(() => drawer.classList.add('open')));
       row.classList.add('active');
       activeRow = row; activeDrawer = drawer;
-      autoCloseTimer = setTimeout(() => closeDrawer(false), 3000);
+      autoCloseTimer = setTimeout(() => closeDrawer(false), 20000);
     }
 
     // ── Hover preview element (created once) ──
@@ -213,7 +213,7 @@
             <span class="col-title">${projectName || ''}</span>
             <span class="col-year">${year || ''}</span>
             <span class="col-city"></span>
-            <span class="col-count">(${imgs.length})</span>
+            <span class="col-count">(${assetList.length})</span>
             <span class="col-tags">${projectGenre || ''}</span>
           `;
           wrapper.appendChild(row);
