@@ -98,10 +98,11 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 100%;
   min-width: 0;
   padding-right: 2rem;
+  padding-bottom: 220px;
 }
 
 /* Wrapper is full-width; rows are centred individually; drawer uses order to slot in after clicked row */
@@ -143,9 +144,15 @@ a { color: inherit; text-decoration: none; }
 
 .portfolio-spacer { height: 2rem; }
 
-/* Bottom-left info block */
+/* Bottom-left info block — fixed so rows scroll behind it */
 .portfolio-info {
-  padding: 2rem 2rem 0;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  z-index: 10;
+  padding: 3rem 2rem 1.5rem;
+  background: linear-gradient(to bottom, transparent 0%, var(--background) 3rem);
   font-size: 16.8px;
   line-height: 1.1;
   color: var(--on-surface);
@@ -299,6 +306,17 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: -0.02em;
 }
 
+
+/* ─── Responsive: narrow viewport ─── */
+@media (max-width: 768px) {
+  .index-main {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolio-info {
+    width: 100%;
+  }
+}
 
 /* ══════════════════════════════════════════
    GALLERY PAGE
