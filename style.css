@@ -133,7 +133,7 @@ a { color: inherit; text-decoration: none; }
   font-size: 16.8px;
 }
 
-.portfolio-row:hover  { color: #ffffff; }
+.portfolio-row:hover  { color: #EA3F25; }
 .portfolio-row.active { background-color: #EA3F25; color: #EAD091; }
 
 .col-title { min-width: 220px; flex-shrink: 0; text-align: left; white-space: nowrap; padding-right: 2rem; }
