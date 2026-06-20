@@ -141,6 +141,7 @@ a { color: inherit; text-decoration: none; }
 .col-city  { display: none; }
 .col-count { display: none; }
 .col-tags  { white-space: nowrap; text-align: left; }
+.genre-abbr { display: none; }
 
 .portfolio-spacer { height: 2rem; }
 
@@ -154,7 +155,7 @@ a { color: inherit; text-decoration: none; }
   padding: 3rem 2rem 1.5rem;
   background: linear-gradient(to bottom, transparent 0%, var(--background) 3rem);
   font-size: 16.8px;
-  line-height: 1.1;
+  line-height: 1.375;
   color: var(--on-surface);
   display: flex;
   flex-direction: column;
@@ -312,10 +313,45 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 768px) {
   .index-main {
     grid-template-columns: 1fr;
+    padding-top: 12.5px;
+    padding-bottom: 0.75rem;
+  }
+
+  .portfolio-list {
+    padding-right: 1rem;
+    padding-bottom: 110px;
   }
 
   .portfolio-info {
     width: 100%;
+    padding: 1.5rem 1rem 0.75rem;
+  }
+
+  .portfolio-row {
+    width: 100%;
+    overflow: hidden;
+    padding: 0.03125rem 1rem;
+  }
+
+  .col-year {
+    display: none;
+  }
+
+  .col-tags {
+    min-width: 0;
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: right;
+    margin-left: auto;
+  }
+
+  .genre-full { display: none; }
+
+  .genre-abbr {
+    display: inline;
+    font-family: 'Shippori Antique B1', sans-serif;
+    font-size: 13.2px;
   }
 }
 

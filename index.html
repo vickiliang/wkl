@@ -177,6 +177,15 @@
         // Insert rows into the wrapper
         const wrapper = document.querySelector('.portfolio-rows-wrapper');
 
+        function abbreviateGenre(g) {
+          const s = (g || '').toLowerCase();
+          if (s.includes('art direction')) return 'AD';
+          if (s.includes('photography'))   return 'PHOTO';
+          if (s.includes('design') || s.includes('animation')) return 'DESIGN';
+          if (s.includes('graphics'))      return 'GRAPHICS';
+          return g;
+        }
+
         data.items.forEach(item => {
           const { projectName, projectGenre, year, assets } = item.fields;
           const refs = Array.isArray(assets) ? assets : assets ? [assets] : [];
@@ -195,7 +204,10 @@
             <span class="col-year">${year || ''}</span>
             <span class="col-city"></span>
             <span class="col-count">(${assetList.length})</span>
-            <span class="col-tags">${projectGenre || ''}</span>
+            <span class="col-tags">
+              <span class="genre-full">${projectGenre || ''}</span>
+              <span class="genre-abbr">${abbreviateGenre(projectGenre)}</span>
+            </span>
           `;
           wrapper.appendChild(row);
         });
