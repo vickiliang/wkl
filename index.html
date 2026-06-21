@@ -213,11 +213,18 @@
         });
 
         initRowHandlers();
+        updateScrollLock();
       } catch (err) {
         console.error('Contentful fetch failed:', err);
       }
     }
 
+    function updateScrollLock() {
+      document.body.style.overflow =
+        document.body.scrollHeight > window.innerHeight ? '' : 'hidden';
+    }
+
+    window.addEventListener('resize', updateScrollLock);
     loadFromContentful();
 
   </script>
