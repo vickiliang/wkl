@@ -23,15 +23,14 @@
       </div><!-- /.portfolio-rows-wrapper -->
 
       <div class="portfolio-info">
+        <div class="info-divider"><span class="info-arrow">↓</span></div>
         <div class="info-slide-region">
           <div class="info-slide-block">
-            <div class="info-divider"><span class="info-arrow">↓</span></div>
             <p class="portfolio-bio">Vicki Liang is a Shanghai-based art director and designer. Previously she served as the assistant Art Director of VOGUE China. Selected clients and collaborators include, ERDOS, BLUE ERDOS, Louis Vuitton and Prada. A full CV and portfolio is available upon request.</p>
           </div>
         </div>
-        <p class="info-label">GENERAL INQUIRIES</p>
-        <a href="mailto:vickyyliang@gmail.com">vickyyliang@gmail.com</a>
-        <a href="https://instagram.com/vickiliang_" target="_blank">@vickiliang_</a>
+        <a href="mailto:vickyyliang@gmail.com" class="info-contact">vickyyliang@gmail.com</a>
+        <a href="https://instagram.com/vickiliang_" target="_blank" class="info-contact">@vickiliang_</a>
       </div>
 
     </div>
@@ -232,8 +231,8 @@
     window.addEventListener('resize', updateScrollLock);
     loadFromContentful();
 
-    // Divider + bio slides down after 5 seconds
-    setTimeout(() => {
+    // Arrow click slides divider + bio down
+    document.querySelector('.info-arrow').addEventListener('click', () => {
       const block  = document.querySelector('.info-slide-block');
       const region = document.querySelector('.info-slide-region');
       if (!block || !region) return;
@@ -246,7 +245,7 @@
         region.style.transition = `max-height ${ease}`;
         region.style.maxHeight  = '0px';
       });
-    }, 5000);
+    });
 
   </script>
 

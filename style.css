@@ -177,6 +177,7 @@ a { color: inherit; text-decoration: none; }
 .info-arrow {
   font-size: 14px;
   line-height: 1;
+  cursor: pointer;
 }
 
 .portfolio-info .info-label {
@@ -193,6 +194,14 @@ a { color: inherit; text-decoration: none; }
 .portfolio-info a {
   color: var(--on-surface);
   text-decoration: none;
+}
+
+.info-contact {
+  font-family: 'Shippori Antique B1', sans-serif;
+  font-size: 13.2px;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .portfolio-info a:hover { text-decoration: underline; }
