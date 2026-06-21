@@ -8,6 +8,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'PPKyoto';
+  src: url('PPKyoto-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
 :root {
   --primary:               #1C191A;
   --on-surface:            #1C191A;
@@ -136,7 +143,7 @@ a { color: inherit; text-decoration: none; }
 .portfolio-row:hover  { color: #EA3F25; }
 .portfolio-row.active { background-color: #EA3F25; color: #EAD091; }
 
-.col-title { min-width: 220px; flex-shrink: 0; text-align: left; white-space: nowrap; padding-right: 2rem; }
+.col-title { min-width: 220px; flex-shrink: 0; text-align: left; white-space: nowrap; padding-right: 2rem; font-family: 'PPKyoto', serif; }
 .col-year  { width: 60px;  flex-shrink: 0; text-align: left; }
 .col-city  { display: none; }
 .col-count { display: none; }
@@ -188,6 +195,10 @@ a { color: inherit; text-decoration: none; }
 
 .info-slide-region {
   overflow: hidden;
+}
+
+.portfolio-bio {
+  font-family: 'PPKyoto', serif;
 }
 
 .info-arrow {
