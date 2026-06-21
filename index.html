@@ -181,7 +181,7 @@
           const s = (g || '').toLowerCase();
           if (s.includes('art direction')) return 'AD';
           if (s.includes('photography'))   return 'PHOTO';
-          if (s.includes('design') || s.includes('animation')) return 'DESIGN';
+          if (s.includes('design') || s.includes('animation')) return 'GRAPHICS';
           if (s.includes('graphics'))      return 'GRAPHICS';
           return g;
         }
@@ -220,8 +220,8 @@
     }
 
     function updateScrollLock() {
-      document.body.style.overflow =
-        document.body.scrollHeight > window.innerHeight ? '' : 'hidden';
+      const scrollable = document.documentElement.scrollHeight > window.innerHeight;
+      document.body.style.overflow = scrollable ? '' : 'hidden';
     }
 
     window.addEventListener('resize', updateScrollLock);

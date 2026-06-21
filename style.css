@@ -84,7 +84,7 @@ a { color: inherit; text-decoration: none; }
 .index-nav .nav-right a:hover { opacity: 0.6; }
 
 .index-main {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: stretch;
@@ -325,8 +325,6 @@ a { color: inherit; text-decoration: none; }
   .portfolio-info {
     width: 100%;
     padding: 1.5rem 1rem 0.75rem;
-    font-family: 'Shippori Antique B1', sans-serif;
-    font-size: 13.2px;
   }
 
   .portfolio-row {
