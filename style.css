@@ -159,25 +159,42 @@ a { color: inherit; text-decoration: none; }
   color: var(--on-surface);
   display: flex;
   flex-direction: column;
+  gap: 0;
+}
+
+.info-line {
+  display: block;
+  border-top: 0.5px solid var(--on-surface);
+  margin-bottom: 1em;
+}
+
+.bio-collapsed .info-line {
+  margin-bottom: 0.375rem;
+}
+
+.info-content-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.info-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   gap: 0.375rem;
+  min-width: 0;
 }
 
 .info-slide-region {
   overflow: hidden;
 }
 
-.info-divider {
-  border-top: 0.5px solid var(--on-surface);
-  display: flex;
-  justify-content: flex-end;
-  padding-top: 4px;
-  margin-bottom: 0.375rem;
-}
-
 .info-arrow {
   font-size: 14px;
-  line-height: 1;
+  line-height: 1.375;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .portfolio-info .info-label {
@@ -202,6 +219,7 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase;
   text-decoration: underline;
   text-underline-offset: 3px;
+  padding-left: 3em;
 }
 
 .portfolio-info a:hover { text-decoration: underline; }
@@ -262,25 +280,29 @@ a { color: inherit; text-decoration: none; }
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: #fff;
-  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: rgba(255, 255, 255, 0.85);
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
-  width: 110px;
-  height: 110px;
-  font-size: 38.4px;
+  width: 55px;
+  height: 55px;
+  font-size: 19.2px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   padding-left: 6px; /* optical centre for triangle */
-  transition: background 0.2s;
+  transition: background 0.2s, border-color 0.2s;
   pointer-events: all;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 4px 24px rgba(0,0,0,0.15);
 }
 
-.carousel-play-btn:hover { background: rgba(255, 255, 255, 0.95); }
+.carousel-play-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.55);
+}
 
 .index-aside {
   position: fixed;

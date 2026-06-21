@@ -23,14 +23,19 @@
       </div><!-- /.portfolio-rows-wrapper -->
 
       <div class="portfolio-info">
-        <div class="info-divider"><span class="info-arrow">↓</span></div>
-        <div class="info-slide-region">
-          <div class="info-slide-block">
-            <p class="portfolio-bio">Vicki Liang is a Shanghai-based art director and designer. Previously she served as the assistant Art Director of VOGUE China. Selected clients and collaborators include, ERDOS, BLUE ERDOS, Louis Vuitton and Prada. A full CV and portfolio is available upon request.</p>
+        <span class="info-line"></span>
+        <div class="info-content-row">
+          <div class="info-left">
+            <div class="info-slide-region">
+              <div class="info-slide-block">
+                <p class="portfolio-bio">Vicki Liang is a Shanghai-based art director and designer. Previously she served as the assistant Art Director of VOGUE China. Selected clients and collaborators include, ERDOS, BLUE ERDOS, Louis Vuitton and Prada. A full CV and portfolio is available upon request.</p>
+              </div>
+            </div>
+            <a href="mailto:vickyyliang@gmail.com" class="info-contact">vickyyliang@gmail.com</a>
+            <a href="https://instagram.com/vickiliang_" target="_blank" class="info-contact">@vickiliang_</a>
           </div>
+          <span class="info-arrow">↓</span>
         </div>
-        <a href="mailto:vickyyliang@gmail.com" class="info-contact">vickyyliang@gmail.com</a>
-        <a href="https://instagram.com/vickiliang_" target="_blank" class="info-contact">@vickiliang_</a>
       </div>
 
     </div>
@@ -80,14 +85,29 @@
           const btn = document.createElement('button');
           btn.className = 'carousel-play-btn';
           btn.innerHTML = '&#9654;';
-          btn.title = 'Play with sound';
           btn.addEventListener('click', e => {
             e.stopPropagation();
             video.muted = false;
             video.loop = false;
-            video.currentTime = 0;
+            if (video.ended) video.currentTime = 0;
             video.play();
             btn.style.display = 'none';
+            clearTimeout(autoCloseTimer);
+            autoCloseTimer = null;
+          });
+
+          video.addEventListener('click', e => {
+            e.stopPropagation();
+            if (!video.paused) {
+              video.pause();
+              btn.style.display = '';
+              autoCloseTimer = setTimeout(() => closeDrawer(false), 20000);
+            }
+          });
+
+          video.addEventListener('ended', () => {
+            btn.style.display = '';
+            autoCloseTimer = setTimeout(() => closeDrawer(false), 20000);
           });
 
           wrap.appendChild(video);
@@ -231,21 +251,48 @@
     window.addEventListener('resize', updateScrollLock);
     loadFromContentful();
 
-    // Arrow click slides divider + bio down
-    document.querySelector('.info-arrow').addEventListener('click', () => {
+    // Arrow toggle: ↓ collapses bio, ↑ restores — line and arrow always visible
+    let bioVisible = true;
+    let bioHeight  = 0;
+
+    function toggleBio() {
       const block  = document.querySelector('.info-slide-block');
       const region = document.querySelector('.info-slide-region');
+      const arrow  = document.querySelector('.info-arrow');
       if (!block || !region) return;
-      const h = block.offsetHeight;
-      region.style.maxHeight = h + 'px';
-      requestAnimationFrame(() => {
-        const ease = 'cubic-bezier(0.4, 0, 1, 1) 0.65s';
-        block.style.transition  = `transform ${ease}`;
-        block.style.transform   = `translateY(${h}px)`;
+
+      const info = document.querySelector('.portfolio-info');
+      if (bioVisible) {
+        bioHeight = block.offsetHeight;
+        region.style.maxHeight = bioHeight + 'px';
+        requestAnimationFrame(() => {
+          const ease = 'cubic-bezier(0.4, 0, 1, 1) 0.65s';
+          block.style.transition  = `transform ${ease}`;
+          block.style.transform   = `translateY(${bioHeight}px)`;
+          region.style.transition = `max-height ${ease}`;
+          region.style.maxHeight  = '0px';
+        });
+        arrow.textContent = '↑';
+        bioVisible = false;
+        setTimeout(() => info.classList.add('bio-collapsed'), 650);
+      } else {
+        info.classList.remove('bio-collapsed');
+        const ease = 'cubic-bezier(0, 0.8, 0.4, 1) 0.65s';
         region.style.transition = `max-height ${ease}`;
-        region.style.maxHeight  = '0px';
-      });
-    });
+        region.style.maxHeight  = bioHeight + 'px';
+        block.style.transition  = `transform ${ease}`;
+        block.style.transform   = 'translateY(0)';
+        arrow.textContent = '↓';
+        bioVisible = true;
+        setTimeout(() => {
+          region.style.maxHeight  = '';
+          region.style.transition = '';
+          block.style.transition  = '';
+        }, 650);
+      }
+    }
+
+    document.querySelector('.info-arrow').addEventListener('click', toggleBio);
 
   </script>
 
